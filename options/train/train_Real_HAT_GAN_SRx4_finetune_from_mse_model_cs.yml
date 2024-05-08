@@ -41,7 +41,7 @@ datasets:
     type: RealESRGANCsDataset
     dataroot_gt: /kaggle/input/hat-censor/CS # Refer to Real-ESRGAN for OST dataset. Only DF2K is OK.
     dataroot_lq: /kaggle/input/hat-censor/CS
-    meta_info: /kaggle/input/hat-censor/meta_info/meta_info_CS2K_sub_pair.txt
+    meta_info: datasets/meta_info/meta_info_CS2K_sub_pair.txt
     io_backend:
       type: disk
 
