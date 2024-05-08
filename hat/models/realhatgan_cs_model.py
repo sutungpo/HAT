@@ -167,11 +167,12 @@ class RealHATGANCsModel(SRGANModel):
             # clamp and round
             self.lq = torch.clamp((out * 255.0).round(), 0, 255) / 255.
 
+            """
             # random crop
             gt_size = self.opt['gt_size']
             (self.gt, self.gt_usm), self.lq = paired_random_crop([self.gt, self.gt_usm], self.lq, gt_size,
                                                                  self.opt['scale'])
-
+            """
             # training pair pool
             self._dequeue_and_enqueue()
             # sharpen self.gt again, as we have changed the self.gt with self._dequeue_and_enqueue
@@ -258,7 +259,7 @@ class RealHATGANCsModel(SRGANModel):
             self.model_ema(decay=self.ema_decay)
 
         self.log_dict = self.reduce_loss_dict(loss_dict)
-    
+
     def test(self):
         # pad to multiplication of window_size
         window_size = self.opt['network_g']['window_size']

@@ -126,6 +126,9 @@ class RealESRGANCsDataset(data.Dataset):
         #img_gt = imfrombytes(img_bytes, float32=True)
 
         # -------------------- Do augmentation for training: flip, rotation -------------------- #
+        # random crop
+        gt_size = self.opt['gt_size']   
+        img_gt, img_lq = paired_random_crop(img_gt, img_lq, gt_size, 1, gt_path)
         # flip, rotation
         img_gt, img_lq = augment([img_gt, img_lq], self.opt['use_hflip'], self.opt['use_rot'])
         #img_gt = augment(img_gt, self.opt['use_hflip'], self.opt['use_rot'])
@@ -210,14 +213,22 @@ class RealESRGANCsDataset(data.Dataset):
         kernel2 = torch.FloatTensor(kernel2)
 
         #return_d = {'gt': img_gt, 'kernel1': kernel, 'kernel2': kernel2, 'sinc_kernel': sinc_kernel, 'gt_path': gt_path}
-        
+
         img_gt, img_lq = img2tensor([img_gt, img_lq], bgr2rgb=True, float32=True)
         # normalize
         if self.mean is not None or self.std is not None:
             normalize(img_lq, self.mean, self.std, inplace=True)
             normalize(img_gt, self.mean, self.std, inplace=True)
 
-        return_d = {'lq': img_lq, 'gt': img_gt, 'lq_path': lq_path, 'kernel1': kernel, 'kernel2': kernel2, 'sinc_kernel': sinc_kernel, 'gt_path': gt_path}
+        return_d = {
+            'lq': img_lq,
+            'gt': img_gt,
+            'lq_path': lq_path,
+            'kernel1': kernel,
+            'kernel2': kernel2,
+            'sinc_kernel': sinc_kernel,
+            'gt_path': gt_path
+        }
         return return_d
 
     def __len__(self):
